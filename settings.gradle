@@ -1,0 +1,2 @@
+include ':app', ':hint'
+rootProject.name='HintExample'

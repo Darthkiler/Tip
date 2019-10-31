@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="64dp"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="20dp"
+            android:layout_height="10dp"
+            android:layout_margin="20dp"
+            android:background="#2f00" />
+
+    </FrameLayout>
+
+    <View
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="100dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="click"/>
+
+    <datacomprojects.com.hint.TipView
+        android:id="@+id/hipsview1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:fontFamily="@font/roboto_regular"
+        app:textSize="12sp"
+        app:backgroundColor="#F241B6FF"
+        app:text="Use the snap button to capture  image"
+        android:alpha="0.95"/>
+
+    <datacomprojects.com.hint.TipView
+        android:id="@+id/hipsview2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:fontFamily="@font/roboto_medium"
+        app:textSize="12sp"
+        app:backgroundColor="#F241B6FF"
+        app:text="Choose recognition and translation language here"
+        android:alpha="0.95"/>
+
+    <datacomprojects.com.hint.TipView
+        android:id="@+id/hipsview3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:font_Family="@font/roboto_bold"
+        app:textSize="12sp"
+        app:backgroundColor="#F241B6FF"
+        app:text="You can tap to edit the text"
+        android:alpha="0.95"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
