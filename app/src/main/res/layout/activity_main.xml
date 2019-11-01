@@ -6,13 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_marginStart="200dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="64dp"
         android:layout_height="wrap_content"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -26,7 +24,6 @@
     </FrameLayout>
 
     <View
-
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="100dp"
@@ -60,6 +57,7 @@
         app:fontFamily="@font/roboto_medium"
         app:textSize="12sp"
         app:backgroundColor="#F241B6FF"
+        app:viewBottomPosition="true"
         app:text="Choose recognition and translation language here"
         android:alpha="0.95"/>
 
@@ -74,6 +72,7 @@
         app:textSize="12sp"
         app:backgroundColor="#F241B6FF"
         app:text="You can tap to edit the text"
+        app:viewBottomPosition="false"
         android:alpha="0.95"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

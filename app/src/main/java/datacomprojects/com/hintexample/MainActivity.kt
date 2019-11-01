@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), TipNeedToDismissTipInterface {
 
-
     lateinit var hintsList : TipsList
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,10 +43,6 @@ class MainActivity : AppCompatActivity(), TipNeedToDismissTipInterface {
         super.onResume()
         Handler().postDelayed({ hintsList.showNext(this) }, 500)
 
-    }
-
-    fun click(view: View) {
-        //hintsList.dismissCurrent()
     }
 
     override fun needToDismiss() {

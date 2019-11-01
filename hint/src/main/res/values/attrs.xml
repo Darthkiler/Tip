@@ -6,5 +6,8 @@
         <attr name="textSize" format="dimension"/>
         <attr name="font_Family" format="reference"/>
         <attr name="backgroundColor" format="color"/>
+        <attr name="viewBottomPosition" format="boolean"/>
+        <attr name="cornerRadius" format="dimension"/>
+        <attr name="cursorMargin" format="dimension"/>
     </declare-styleable>
 </resources>

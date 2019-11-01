@@ -54,6 +54,12 @@ class TipView @JvmOverloads constructor(
 
         pointerPositionTop = true
 
+        cornerRadius = CORNER_RADIUS
+        cursorMargin = CURSOR_MARGIN
+        marginBetweenCursorAndView = MARGIN_BETWEEN_CURSOR_AND_VIEW
+        cursorHeight = CURSOR_HEIGHT
+        cursorHalfWidth = CURSOR_HALF_WIDTH
+
         attrs?.let {
             val typedArray = context.obtainStyledAttributes(attrs, R.styleable.TipView)
 
@@ -72,14 +78,16 @@ class TipView @JvmOverloads constructor(
 
             paint.color = typedArray.getColor(R.styleable.TipView_backgroundColor,Color.BLACK)
 
+            pointerPositionTop = typedArray.getBoolean(R.styleable.TipView_viewBottomPosition,true)
+
+            //cornerRadius = typedArray.getDimension(R.styleable.TipView_cornerRadius, CORNER_RADIUS.toFloat()).roundToInt()
+
+            //cursorMargin = typedArray.getDimension(R.styleable.TipView_cursorMargin, CURSOR_MARGIN.toFloat()).roundToInt()
+
             typedArray.recycle()
         }
 
-        cornerRadius = CORNER_RADIUS
-        cursorMargin = CURSOR_MARGIN
-        marginBetweenCursorAndView = MARGIN_BETWEEN_CURSOR_AND_VIEW
-        cursorHeight = CURSOR_HEIGHT
-        cursorHalfWidth = CURSOR_HALF_WIDTH
+
 
         attachToView(null)
 
@@ -136,16 +144,13 @@ class TipView @JvmOverloads constructor(
                 )
             )
 
-            val goesOverRightEdge = translationX + measuredWidth - parentCenter * 2
-
-            if (goesOverRightEdge > 0) {
-                translationX -= Math.min(
-                    goesOverRightEdge,
-                    (2 * Math.min(
-                        cursorMargin,
-                        cornerRadius + cursorMargin - MIN_CURSOR_MARGIN_WITH_RADIUS
-                    )).toFloat()
-                )
+            if(translationX < 0)
+                translationX += Math.min(-translationX, Math.min(cursorMargin,cornerRadius + cursorMargin - MIN_CURSOR_MARGIN_WITH_RADIUS).toFloat())
+            else {
+                val goesOverRightEdge: Float = translationX + measuredWidth - parentCenter * 2
+                if(goesOverRightEdge > 0)
+                    translationX -= Math.min(goesOverRightEdge,
+                        Math.min(cursorMargin, cornerRadius + cursorMargin - MIN_CURSOR_MARGIN_WITH_RADIUS).toFloat())
             }
 
             setTranslationX(translationX)
