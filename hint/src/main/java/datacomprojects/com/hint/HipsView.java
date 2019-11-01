@@ -3,7 +3,6 @@ package datacomprojects.com.hint;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -14,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import datacomprojects.com.tip.R;
 
 public class HipsView extends ConstraintLayout {
 

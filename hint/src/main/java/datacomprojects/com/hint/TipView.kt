@@ -15,8 +15,9 @@ import datacomprojects.com.roundbackground.RoundBackgroundLayout
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.view.MotionEvent
-import datacomprojects.com.hint.callbacks.HintNeedToDismissHintInterface
+import datacomprojects.com.hint.callbacks.TipNeedToDismissTipInterface
 import datacomprojects.com.hint.callbacks.TipViewAnimationEndCallBack
+import datacomprojects.com.tip.R
 
 
 class TipView @JvmOverloads constructor(
@@ -41,7 +42,7 @@ class TipView @JvmOverloads constructor(
     private var pointerPositionTop: Boolean = false
     private var view: View? = null
 
-    var hintNeedToDismissHintInterface: HintNeedToDismissHintInterface? = null
+    var tipNeedToDismissTipInterface: TipNeedToDismissTipInterface? = null
     var tipViewAnimationEndCallBack: TipViewAnimationEndCallBack? = null
 
     init {
@@ -92,7 +93,7 @@ class TipView @JvmOverloads constructor(
         animateViewVisibility(this, View.VISIBLE)
         requestFocus()
         setOnFocusChangeListener { v, _ ->
-            hintNeedToDismissHintInterface?.needToDismiss()
+            tipNeedToDismissTipInterface?.needToDismiss()
         }
     }
 
@@ -216,7 +217,7 @@ class TipView @JvmOverloads constructor(
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        hintNeedToDismissHintInterface?.needToDismiss()
+        tipNeedToDismissTipInterface?.needToDismiss()
         return false
     }
 

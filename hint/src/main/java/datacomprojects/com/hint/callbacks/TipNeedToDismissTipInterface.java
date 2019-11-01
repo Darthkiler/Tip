@@ -1,6 +1,6 @@
 package datacomprojects.com.hint.callbacks;
 
 @FunctionalInterface
-public interface HintNeedToDismissHintInterface {
+public interface TipNeedToDismissTipInterface {
     void needToDismiss();
 }

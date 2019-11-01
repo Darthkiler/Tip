@@ -1,6 +1,6 @@
 package datacomprojects.com.hint.callbacks;
 
-public class HintShowCallback {
+public class TipShowCallback {
     public void onShow(String id) {
 
     }
