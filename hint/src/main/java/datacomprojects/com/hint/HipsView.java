@@ -143,13 +143,20 @@ public class HipsView extends ConstraintLayout {
 
         int padding = cornerRadius + cursorMargin + cursorHalfWidth;
 
-        float translationX = viewCenter - getMeasuredWidth() + Math.max(padding, Math.min(getMeasuredWidth() - padding , Math.abs(viewCenter - parentCenter - tipsCenter)));
+        float translationX;
 
+        if(viewCenter < parentCenter) {
+            translationX = viewCenter - Math.max(padding, viewCenter + tipsCenter - parentCenter);
+            // проверка если выходит за левый край
+            if(translationX < 0)
+                translationX += Math.min(-translationX, Math.min(cursorMargin, cornerRadius + cursorMargin - MIN_CURSOR_MARGIN_WITH_RADIUS));
+        } else {
+            translationX = viewCenter - getMeasuredWidth() + Math.max(padding, parentCenter - viewCenter + tipsCenter);
+            // проверка если выходит за правый край
+            float goesOverRightEdge = translationX + getMeasuredWidth() - parentCenter * 2;
 
-        float goesOverRightEdge = translationX + getMeasuredWidth() - parentCenter * 2;
-
-        if(goesOverRightEdge > 0) {
-            translationX -= Math.min(goesOverRightEdge, 2 * Math.min(cursorMargin, cornerRadius + cursorMargin - MIN_CURSOR_MARGIN_WITH_RADIUS));
+            if (goesOverRightEdge > 0)
+                translationX -= Math.min(goesOverRightEdge, Math.min(cursorMargin, cornerRadius + cursorMargin - MIN_CURSOR_MARGIN_WITH_RADIUS));
         }
 
         setTranslationX(translationX);
