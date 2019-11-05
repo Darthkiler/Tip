@@ -239,7 +239,7 @@ class TipView @JvmOverloads constructor(
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         tipNeedToDismissTipInterface?.needToDismiss()
-        return view?.id == roundBackgroundLayout.id
+        return v?.id == roundBackgroundLayout.id
     }
 
     fun setCloseImage(drawable: Drawable) {
