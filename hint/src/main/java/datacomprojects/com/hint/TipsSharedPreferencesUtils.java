@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
+
 
 @SuppressLint("CommitPrefEdits")
 public class TipsSharedPreferencesUtils {
@@ -75,5 +77,22 @@ public class TipsSharedPreferencesUtils {
         if(instance==null)
             instance = new TipsSharedPreferencesUtils(context);
         return instance;
+    }
+
+    public static boolean isAllKeysTrue(Context context, ArrayList<String> keys) {
+        int n = 0;
+        for (String key :
+                keys) {
+            if(getInstance(context).getBoolean(key,false))
+                n++;
+        }
+        return  keys.size() == n;
+    }
+
+    public static void putAllKeys(Context context, ArrayList<String> keys) {
+        SharedPreferences.Editor editor = getInstance(context).editor;
+        for(String key:keys)
+            editor.putBoolean(key,true);
+        editor.apply();
     }
 }

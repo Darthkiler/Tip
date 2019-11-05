@@ -28,6 +28,8 @@ class MainActivity : AppCompatActivity(), TipNeedToDismissTipInterface {
 
         hintsList.addAll()
 
+        TipsSharedPreferencesUtils.putAllKeys(this,L.Utils.asList("qwe","asd","zxc"))
+
         hintsList.setHintShowedCallback(object : TipShowCallback() {
             override fun onDismiss(id: String?) {
                 super.onDismiss(id)
@@ -38,13 +40,13 @@ class MainActivity : AppCompatActivity(), TipNeedToDismissTipInterface {
 
         hipsview1.setCloseImage(resources.getDrawable(R.drawable.ic_launcher_background))
 
-        //TipsSharedPreferencesUtils.removeFile(this)
+        TipsSharedPreferencesUtils.removeFile(this)
     }
 
     override fun onResume() {
         super.onResume()
         Handler().postDelayed({ hintsList.showNext(this) }, 500)
-
+        L.show(TipsSharedPreferencesUtils.isAllKeysTrue(this,L.Utils.asList("qwe","asd","zxc")))
     }
 
     override fun needToDismiss() {
