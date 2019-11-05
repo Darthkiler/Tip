@@ -17,6 +17,10 @@ class TipsList(private val context: Context) {
         this.hintShowedCallback = hintShowedCallback
     }
 
+    fun addTipToArray(tip: Tip) {
+        tipArrayList.add(tip)
+    }
+
     fun showNext(tipNeedToDismissTipInterface: TipNeedToDismissTipInterface) {
         for (tip in tipArrayList) {
             if (tip.showIfNeed(context)) {
