@@ -17,6 +17,7 @@ import android.animation.AnimatorListenerAdapter
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.Drawable
 import android.view.MotionEvent
+import darthkilersprojects.com.log.L
 import datacomprojects.com.hint.callbacks.TipNeedToDismissTipInterface
 import datacomprojects.com.hint.callbacks.TipViewAnimationEndCallBack
 import datacomprojects.com.tip.R
@@ -97,6 +98,7 @@ class TipView @JvmOverloads constructor(
         visibility = View.INVISIBLE
 
         setOnTouchListener(this)
+        roundBackgroundLayout.setOnTouchListener(this)
 
     }
 
@@ -238,8 +240,12 @@ class TipView @JvmOverloads constructor(
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        tipNeedToDismissTipInterface?.needToDismiss()
-        return view?.id == roundBackgroundLayout.id
+        if(event?.action == MotionEvent.ACTION_DOWN) {
+            tipNeedToDismissTipInterface?.needToDismiss()
+            L.show(L.Utils.asList(v?.id, roundBackgroundLayout.id))
+            return v?.id == roundBackgroundLayout.id
+        }
+        return false
     }
 
     fun setCloseImage(drawable: Drawable) {
