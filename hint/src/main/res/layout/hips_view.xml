@@ -13,6 +13,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_min="100dp"
         app:layout_constraintWidth_max="300dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0"
         app:radius="8dp"
         app:color="@android:color/holo_green_dark">
 

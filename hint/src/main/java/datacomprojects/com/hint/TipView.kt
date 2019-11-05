@@ -130,7 +130,7 @@ class TipView @JvmOverloads constructor(
 
             val viewCenter = viewLocation[0] - parentLocation[0] + view!!.getMeasuredWidth() / 2f
             val parentCenter = (parent as ViewGroup).measuredWidth / 2f
-            val tipsCenter = measuredWidth / 2f
+            val tipsCenter = roundBackgroundLayout.measuredWidth / 2f
 
             val padding = cornerRadius + cursorMargin + cursorHalfWidth
 
@@ -239,7 +239,7 @@ class TipView @JvmOverloads constructor(
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         tipNeedToDismissTipInterface?.needToDismiss()
-        return false
+        return view?.id == roundBackgroundLayout.id
     }
 
     fun setCloseImage(drawable: Drawable) {
