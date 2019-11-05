@@ -36,6 +36,8 @@ class MainActivity : AppCompatActivity(), TipNeedToDismissTipInterface {
             }
         })
 
+        hipsview1.setCloseImage(resources.getDrawable(R.drawable.ic_launcher_background))
+
         //TipsSharedPreferencesUtils.removeFile(this)
     }
 
