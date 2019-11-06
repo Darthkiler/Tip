@@ -1,14 +1,16 @@
 package datacomprojects.com.hint
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.View
 
-class Tip(var hintID: String, var customHint: TipView, view: View?, list: TipsList?) {
+class Tip @JvmOverloads constructor(var hintID: String, var customHint: TipView, view: View?, closeDrawable: Drawable? = null) {
     var isShow = false
 
     init {
         if (view != null)
             this.customHint.attachToView(view)
+        closeDrawable?.let { customHint.setCloseImage(it) }
     }
 
     fun showIfNeed(context: Context): Boolean {

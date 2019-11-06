@@ -25,8 +25,7 @@ class TipsList(private val context: Context) {
         for (tip in tipArrayList) {
             if (tip.showIfNeed(context)) {
                 tip.customHint.tipNeedToDismissTipInterface = tipNeedToDismissTipInterface
-                if (hintShowedCallback != null)
-                    hintShowedCallback!!.onShow(tip.hintID)
+                hintShowedCallback?.onShow(tip.hintID)
                 break
             }
         }
@@ -53,8 +52,7 @@ class TipsList(private val context: Context) {
         for (tip in tipArrayList)
             if (tip.isShow) {
                 tip.hide(context)
-                if (hintShowedCallback != null)
-                    hintShowedCallback!!.onDismiss(tip.hintID)
+                hintShowedCallback?.onDismiss(tip.hintID)
                 break
             }
     }

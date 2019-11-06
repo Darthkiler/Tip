@@ -14,14 +14,13 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import datacomprojects.com.roundbackground.RoundBackgroundLayout
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.Drawable
 import android.view.MotionEvent
-import darthkilersprojects.com.log.L
 import datacomprojects.com.hint.callbacks.TipNeedToDismissTipInterface
 import datacomprojects.com.hint.callbacks.TipViewAnimationEndCallBack
 import datacomprojects.com.tip.R
 import kotlinx.android.synthetic.main.hips_view.view.*
+import kotlin.math.max
 
 
 class TipView @JvmOverloads constructor(
@@ -140,7 +139,7 @@ class TipView @JvmOverloads constructor(
 
             if (viewCenter < parentCenter) {
                 translationX =
-                    viewCenter - Math.max(padding.toFloat(), viewCenter + tipsCenter - parentCenter)
+                    viewCenter - max(padding.toFloat(), viewCenter + tipsCenter - parentCenter)
                 // проверка если выходит за левый край
                 if (translationX < 0)
                     translationX += Math.min(
@@ -151,12 +150,12 @@ class TipView @JvmOverloads constructor(
                         ).toFloat()
                     )
             } else {
-                translationX = viewCenter - roundBackgroundLayout.getMeasuredWidth() + Math.max(
+                translationX = viewCenter - roundBackgroundLayout.measuredWidth + max(
                     padding.toFloat(),
                     parentCenter - viewCenter + tipsCenter
                 )
                 // проверка если выходит за правый край
-                val goesOverRightEdge = translationX + roundBackgroundLayout.getMeasuredWidth() - parentCenter * 2
+                val goesOverRightEdge = translationX + roundBackgroundLayout.measuredWidth - parentCenter * 2
 
                 if (goesOverRightEdge > 0)
                     translationX -= Math.min(
@@ -168,7 +167,7 @@ class TipView @JvmOverloads constructor(
                     )
             }
 
-            roundBackgroundLayout.setTranslationX(translationX)
+            roundBackgroundLayout.translationX = translationX
 
             path.reset()
 
@@ -177,7 +176,7 @@ class TipView @JvmOverloads constructor(
                 val rblPaddingTop = cursorHeight + marginBetweenCursorAndView
                 val translationY =
                     viewLocation[1] - parentLocation[1] + view!!.measuredHeight
-                roundBackgroundLayout.setTranslationY((translationY + rblPaddingTop).toFloat())
+                roundBackgroundLayout.translationY = (translationY + rblPaddingTop).toFloat()
 
                 path.moveTo(viewCenter, (translationY + marginBetweenCursorAndView).toFloat())
                 path.lineTo(
@@ -190,19 +189,19 @@ class TipView @JvmOverloads constructor(
                 )
             } else {
                 val translationY = viewLocation[1] - parentLocation[1] - height
-                roundBackgroundLayout.setTranslationY(translationY.toFloat())
+                roundBackgroundLayout.translationY = translationY.toFloat()
 
                 path.moveTo(
                     viewCenter - cursorHalfWidth,
-                    (translationY + roundBackgroundLayout.getMeasuredHeight()).toFloat()
+                    (translationY + roundBackgroundLayout.measuredHeight).toFloat()
                 )
                 path.lineTo(
                     viewCenter + cursorHalfWidth,
-                    (translationY + roundBackgroundLayout.getMeasuredHeight()).toFloat()
+                    (translationY + roundBackgroundLayout.measuredHeight).toFloat()
                 )
                 path.lineTo(
                     viewCenter,
-                    (translationY + roundBackgroundLayout.getMeasuredHeight() + cursorHeight).toFloat()
+                    (translationY + roundBackgroundLayout.measuredHeight + cursorHeight).toFloat()
                 )
             }
 
@@ -224,8 +223,8 @@ class TipView @JvmOverloads constructor(
         view.animate().setListener(null)
 
         if (visibility == View.VISIBLE) {
-            val duration: Long = view.animate().duration + 200;
-            view.alpha = 0.0f;
+            val duration: Long = view.animate().duration + 200
+            view.alpha = 0.0f
             view.visibility = View.VISIBLE
             view.animate().setDuration(duration).alpha(1f).start()
 
@@ -242,7 +241,6 @@ class TipView @JvmOverloads constructor(
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         if(event?.action == MotionEvent.ACTION_DOWN) {
             tipNeedToDismissTipInterface?.needToDismiss()
-            L.show(L.Utils.asList(v?.id, roundBackgroundLayout.id))
             return v?.id == roundBackgroundLayout.id
         }
         return false
