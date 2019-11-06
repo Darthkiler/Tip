@@ -40,7 +40,7 @@ class TipsList(private val context: Context) {
 
     fun dismissAll() {
         for (tip in tipArrayList)
-            tip.hide(context)
+            tip.hide(context, true)
     }
 
     fun addAll() {
@@ -48,11 +48,12 @@ class TipsList(private val context: Context) {
             tip.reset(context)
     }
 
-    fun dismissCurrent() {
+    fun dismissCurrent(needToRemoveFromSharedPreferencesUtils: Boolean) {
         for (tip in tipArrayList)
             if (tip.isShow) {
-                tip.hide(context)
-                hintShowedCallback?.onDismiss(tip.hintID)
+                tip.hide(context , needToRemoveFromSharedPreferencesUtils)
+                if(needToRemoveFromSharedPreferencesUtils)
+                    hintShowedCallback?.onDismiss(tip.hintID)
                 break
             }
     }

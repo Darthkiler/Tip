@@ -26,8 +26,9 @@ class Tip @JvmOverloads constructor(var hintID: String, var customHint: TipView,
         return TipsSharedPreferencesUtils.getInstance(context).getBoolean(hintID, false)
     }
 
-    fun hide(context: Context) {
-        TipsSharedPreferencesUtils.getInstance(context).putBoolean(hintID, true).apply()
+    fun hide(context: Context, needToRemoveFromSharedPreferencesUtils: Boolean) {
+        if(needToRemoveFromSharedPreferencesUtils)
+            TipsSharedPreferencesUtils.getInstance(context).putBoolean(hintID, true).apply()
         customHint.hide()
         isShow = false
     }
