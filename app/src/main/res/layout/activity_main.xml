@@ -57,6 +57,7 @@
         app:backgroundColor="#F241B6FF"
         app:viewBottomPosition="true"
         app:text="Choose recognition and translation language here"
+        app:marginToView="16dp"
         android:alpha="0.95"/>
 
     <datacomprojects.com.hint.TipView
@@ -71,6 +72,7 @@
         app:backgroundColor="#F241B6FF"
         app:text="You can tap to edit the text"
         app:viewBottomPosition="false"
+        app:marginToView="32dp"
         android:alpha="0.95"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

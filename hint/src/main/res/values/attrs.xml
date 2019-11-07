@@ -9,5 +9,6 @@
         <attr name="viewBottomPosition" format="boolean"/>
         <attr name="cornerRadius" format="dimension"/>
         <attr name="cursorMargin" format="dimension"/>
+        <attr name="marginToView" format="dimension"/>
     </declare-styleable>
 </resources>

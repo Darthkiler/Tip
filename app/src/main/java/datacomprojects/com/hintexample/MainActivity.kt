@@ -43,6 +43,6 @@ class MainActivity : AppCompatActivity(), TipNeedToDismissTipInterface {
     }
 
     override fun needToDismiss() {
-        hintsList.dismissCurrent()
+        hintsList.dismissCurrent(true)
     }
 }

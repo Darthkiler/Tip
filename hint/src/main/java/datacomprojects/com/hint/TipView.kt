@@ -83,14 +83,17 @@ class TipView @JvmOverloads constructor(
 
             pointerPositionTop = typedArray.getBoolean(R.styleable.TipView_viewBottomPosition,true)
 
-            //cornerRadius = typedArray.getDimension(R.styleable.TipView_cornerRadius, CORNER_RADIUS.toFloat()).roundToInt()
+            cornerRadius = typedArray.getDimensionPixelSize(R.styleable.TipView_cornerRadius, CORNER_RADIUS)
 
-            //cursorMargin = typedArray.getDimension(R.styleable.TipView_cursorMargin, CURSOR_MARGIN.toFloat()).roundToInt()
+            cursorMargin = typedArray.getDimensionPixelSize(R.styleable.TipView_cursorMargin, CURSOR_MARGIN)
+
+            marginBetweenCursorAndView = typedArray.getDimensionPixelSize(R.styleable.TipView_marginToView , MARGIN_BETWEEN_CURSOR_AND_VIEW)
 
             typedArray.recycle()
         }
 
 
+        cursorMargin = Math.max(cursorMargin, MIN_CURSOR_MARGIN_WITH_RADIUS - cornerRadius);
 
         attachToView(null)
 
