@@ -10,5 +10,6 @@
         <attr name="cornerRadius" format="dimension"/>
         <attr name="cursorMargin" format="dimension"/>
         <attr name="marginToView" format="dimension"/>
+        <attr name="shadow_color" format="color"/>
     </declare-styleable>
 </resources>

@@ -1,38 +1,41 @@
 package datacomprojects.com.hint
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Path
+import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import datacomprojects.com.roundbackground.RoundBackgroundLayout
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.graphics.drawable.Drawable
-import android.view.MotionEvent
 import datacomprojects.com.hint.callbacks.TipNeedToDismissTipInterface
 import datacomprojects.com.hint.callbacks.TipViewAnimationEndCallBack
+import datacomprojects.com.roundbackground.RoundBackgroundLayout
 import datacomprojects.com.tip.R
 import kotlinx.android.synthetic.main.hips_view.view.*
 import kotlin.math.max
+import kotlin.math.min
 
 
 class TipView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), View.OnTouchListener{
 
-    private val CORNER_RADIUS = dpToPx(4)
-    private val CURSOR_MARGIN = dpToPx(22)
-    private val MIN_CURSOR_MARGIN_WITH_RADIUS = dpToPx(8)
-    private val MARGIN_BETWEEN_CURSOR_AND_VIEW = dpToPx(5)
-    private val CURSOR_HEIGHT = dpToPx(15)
-    private val CURSOR_HALF_WIDTH = dpToPx(15)
+    companion object {
+
+        private val CORNER_RADIUS = dpToPx(4)
+        private val CURSOR_MARGIN = dpToPx(22)
+        private val MIN_CURSOR_MARGIN_WITH_RADIUS = dpToPx(8)
+        private val MARGIN_BETWEEN_CURSOR_AND_VIEW = dpToPx(5)
+        private val CURSOR_HEIGHT = dpToPx(15)
+        private val CURSOR_HALF_WIDTH = dpToPx(15)
+
+        private fun dpToPx(dp: Int): Int = (dp * Resources.getSystem().displayMetrics.density).toInt()
+    }
 
     private var cornerRadius: Int = 0
     private var cursorMargin: Int = 0
@@ -40,8 +43,9 @@ class TipView @JvmOverloads constructor(
     private var cursorHeight: Int = 0
     private var cursorHalfWidth: Int = 0
 
-    private var paint: Paint
-    private var path: Path
+    private var paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val paint1 = Paint()
+    private var path = Path()
     private var pointerPositionTop: Boolean = false
     private var view: View? = null
 
@@ -50,10 +54,6 @@ class TipView @JvmOverloads constructor(
 
     init {
         View.inflate(context, R.layout.hips_view, this)
-
-        paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        paint.color = Color.GREEN
-        path = Path()
 
         pointerPositionTop = true
 
@@ -79,21 +79,34 @@ class TipView @JvmOverloads constructor(
                 )
             )
 
-            paint.color = typedArray.getColor(R.styleable.TipView_backgroundColor,Color.BLACK)
+            paint.color = typedArray.getColor(R.styleable.TipView_backgroundColor, Color.BLACK)
 
-            pointerPositionTop = typedArray.getBoolean(R.styleable.TipView_viewBottomPosition,true)
+            pointerPositionTop = typedArray.getBoolean(R.styleable.TipView_viewBottomPosition, true)
 
-            cornerRadius = typedArray.getDimensionPixelSize(R.styleable.TipView_cornerRadius, CORNER_RADIUS)
+            cornerRadius = typedArray.getDimensionPixelSize(
+                R.styleable.TipView_cornerRadius,
+                CORNER_RADIUS
+            )
 
-            cursorMargin = typedArray.getDimensionPixelSize(R.styleable.TipView_cursorMargin, CURSOR_MARGIN)
+            paint1.color = typedArray.getColor(
+                R.styleable.TipView_shadow_color,
+                Color.parseColor("#55000000")
+            )
 
-            marginBetweenCursorAndView = typedArray.getDimensionPixelSize(R.styleable.TipView_marginToView , MARGIN_BETWEEN_CURSOR_AND_VIEW)
+            cursorMargin = typedArray.getDimensionPixelSize(
+                R.styleable.TipView_cursorMargin,
+                CURSOR_MARGIN
+            )
+
+            marginBetweenCursorAndView = typedArray.getDimensionPixelSize(
+                R.styleable.TipView_marginToView,
+                MARGIN_BETWEEN_CURSOR_AND_VIEW
+            )
 
             typedArray.recycle()
         }
 
-
-        cursorMargin = Math.max(cursorMargin, MIN_CURSOR_MARGIN_WITH_RADIUS - cornerRadius);
+        cursorMargin = max(cursorMargin, MIN_CURSOR_MARGIN_WITH_RADIUS - cornerRadius)
 
         attachToView(null)
 
@@ -113,26 +126,26 @@ class TipView @JvmOverloads constructor(
     }
 
     override fun dispatchDraw(canvas: Canvas) {
-        super.dispatchDraw(canvas)
 
         view?.let {
 
-            val height =
-                roundBackgroundLayout.getMeasuredHeight() + cursorHeight + marginBetweenCursorAndView;
+            val height = roundBackgroundLayout.measuredHeight + cursorHeight + marginBetweenCursorAndView
 
             val viewLocation = IntArray(2)
-            view!!.getLocationInWindow(viewLocation)
+            it.getLocationInWindow(viewLocation)
 
             val parentLocation = IntArray(2)
             (parent as ViewGroup).getLocationInWindow(parentLocation)
 
+            drawBackground(canvas, it)
+
             if (pointerPositionTop) {
-                if (viewLocation[1] - parentLocation[1] + view!!.getMeasuredHeight() + height > (parent as ViewGroup).measuredHeight)
+                if (viewLocation[1] - parentLocation[1] + it.measuredHeight + height > (parent as ViewGroup).measuredHeight)
                     pointerPositionTop = false
             } else if (viewLocation[1] - parentLocation[1] < height)
                 pointerPositionTop = true
 
-            val viewCenter = viewLocation[0] - parentLocation[0] + view!!.getMeasuredWidth() / 2f
+            val viewCenter = viewLocation[0] - parentLocation[0] + it.measuredWidth / 2f
             val parentCenter = (parent as ViewGroup).measuredWidth / 2f
             val tipsCenter = roundBackgroundLayout.measuredWidth / 2f
 
@@ -145,9 +158,9 @@ class TipView @JvmOverloads constructor(
                     viewCenter - max(padding.toFloat(), viewCenter + tipsCenter - parentCenter)
                 // проверка если выходит за левый край
                 if (translationX < 0)
-                    translationX += Math.min(
+                    translationX += min(
                         -translationX,
-                        Math.min(
+                        min(
                             cursorMargin,
                             cornerRadius + cursorMargin - MIN_CURSOR_MARGIN_WITH_RADIUS
                         ).toFloat()
@@ -161,9 +174,9 @@ class TipView @JvmOverloads constructor(
                 val goesOverRightEdge = translationX + roundBackgroundLayout.measuredWidth - parentCenter * 2
 
                 if (goesOverRightEdge > 0)
-                    translationX -= Math.min(
+                    translationX -= min(
                         goesOverRightEdge,
-                        Math.min(
+                        min(
                             cursorMargin,
                             cornerRadius + cursorMargin - MIN_CURSOR_MARGIN_WITH_RADIUS
                         ).toFloat()
@@ -178,7 +191,7 @@ class TipView @JvmOverloads constructor(
 
                 val rblPaddingTop = cursorHeight + marginBetweenCursorAndView
                 val translationY =
-                    viewLocation[1] - parentLocation[1] + view!!.measuredHeight
+                    viewLocation[1] - parentLocation[1] + it.measuredHeight
                 roundBackgroundLayout.translationY = (translationY + rblPaddingTop).toFloat()
 
                 path.moveTo(viewCenter, (translationY + marginBetweenCursorAndView).toFloat())
@@ -212,9 +225,10 @@ class TipView @JvmOverloads constructor(
             canvas.drawPath(path, paint)
         }
 
-    }
 
-    private fun dpToPx(dp: Int): Int = (dp * Resources.getSystem().displayMetrics.density).toInt()
+        super.dispatchDraw(canvas)
+
+    }
 
     fun attachToView(view: View?) {
         this.view = view
@@ -240,6 +254,27 @@ class TipView @JvmOverloads constructor(
             }).alpha(0f).start()
         }
     }
+
+    private fun drawBackground(canvas: Canvas, view: View) {
+        val viewLocation = IntArray(2)
+        view.getLocationInWindow(viewLocation)
+
+        val parentLocation = IntArray(2)
+        (parent as ViewGroup).getLocationInWindow(parentLocation)
+
+        val left = viewLocation[0].toFloat() - parentLocation[0]
+        val top = viewLocation[1].toFloat() - parentLocation[1]
+
+        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val canvas1 = Canvas(bitmap)
+        view.draw(canvas1)
+
+        canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint1)
+
+        canvas.drawBitmap(bitmap, left, top, paint)
+
+    }
+
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         if(event?.action == MotionEvent.ACTION_DOWN) {
