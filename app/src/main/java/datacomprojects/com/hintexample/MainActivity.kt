@@ -3,6 +3,7 @@ package datacomprojects.com.hintexample
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import androidx.core.content.ContextCompat
 import datacomprojects.com.hint.Tip
 import datacomprojects.com.hint.TipsList
 import datacomprojects.com.hint.TipsSharedPreferencesUtils
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity(), TipNeedToDismissTipInterface {
 
         hintsList.tipArrayList.add(Tip("qwe", hipsview1, view, resources.getDrawable(R.drawable.ic_launcher_background, applicationContext.theme)))
         hintsList.tipArrayList.add(Tip("asd", hipsview2, view, null))
-        hintsList.tipArrayList.add(Tip("zxc", hipsview3, view))
+        hintsList.tipArrayList.add(Tip("zxc", hipsview3, view, ContextCompat.getDrawable(this, R.drawable.ic_cancel_ic_tip)))
 
         hintsList.addAll()
 

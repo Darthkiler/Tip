@@ -285,7 +285,7 @@ class TipView @JvmOverloads constructor(
     }
 
     fun setCloseImage(drawable: Drawable) {
-        closeButton.background = drawable
+        closeButton.setImageDrawable(drawable)
     }
 
 }
