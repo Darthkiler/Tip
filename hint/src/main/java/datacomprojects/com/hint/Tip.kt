@@ -8,28 +8,24 @@ class Tip @JvmOverloads constructor(var hintID: String, var customHint: TipView,
     var isShow = false
 
     init {
-        if (view != null)
-            this.customHint.attachToView(view)
+        view?.let { this.customHint.attachToView(it) }
         closeDrawable?.let { customHint.setCloseImage(it) }
     }
 
-    fun showIfNeed(context: Context): Boolean {
+    fun showIfNeed(context: Context, onShowed: () -> Unit) {
         if (!TipsSharedPreferencesUtils.getInstance(context).getBoolean(hintID, false)) {
-            customHint.show()
+            customHint.show(onShowed)
             isShow = true
-            return true
         }
-        return false
     }
 
     fun wasShowed(context: Context): Boolean {
         return TipsSharedPreferencesUtils.getInstance(context).getBoolean(hintID, false)
     }
 
-    fun hide(context: Context, needToRemoveFromSharedPreferencesUtils: Boolean) {
-        if(needToRemoveFromSharedPreferencesUtils)
-            TipsSharedPreferencesUtils.getInstance(context).putBoolean(hintID, true).apply()
-        customHint.hide()
+    fun hide(context: Context, onAnimationEnd: (() -> Unit)? = null) {
+        TipsSharedPreferencesUtils.getInstance(context).putBoolean(hintID, true).apply()
+        customHint.hide(onAnimationEnd)
         isShow = false
     }
 

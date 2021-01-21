@@ -3,15 +3,15 @@ package datacomprojects.com.hintexample
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import datacomprojects.com.hint.Tip
 import datacomprojects.com.hint.TipsList
 import datacomprojects.com.hint.TipsSharedPreferencesUtils
-import datacomprojects.com.hint.callbacks.TipNeedToDismissTipInterface
-import datacomprojects.com.hint.callbacks.TipShowCallback
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), TipNeedToDismissTipInterface {
+class MainActivity : AppCompatActivity() {
 
     lateinit var hintsList : TipsList
 
@@ -21,29 +21,28 @@ class MainActivity : AppCompatActivity(), TipNeedToDismissTipInterface {
 
         hintsList= TipsList(this)
 
-        hintsList.tipArrayList.add(Tip("qwe", hipsview1, view, resources.getDrawable(R.drawable.ic_launcher_background, applicationContext.theme)))
-        hintsList.tipArrayList.add(Tip("asd", hipsview2, view, null))
-        hintsList.tipArrayList.add(Tip("zxc", hipsview3, view, ContextCompat.getDrawable(this, R.drawable.ic_cancel_ic_tip)))
+        hintsList.addTipToArray(Tip("qwe", hipsview1, view, resources.getDrawable(R.drawable.ic_launcher_background, applicationContext.theme)))
+        hintsList.addTipToArray(Tip("asd", hipsview2, view, null))
+        hintsList.addTipToArray(Tip("zxc", hipsview3, view, ContextCompat.getDrawable(this, R.drawable.ic_cancel_ic_tip)))
 
         hintsList.addAll()
-
-
-        hintsList.setHintShowedCallback(object : TipShowCallback() {
-            override fun onDismiss(id: String?) {
-                super.onDismiss(id)
-                hintsList.showNext(this@MainActivity)
-            }
-        })
 
         TipsSharedPreferencesUtils.removeFile(this)
     }
 
-    override fun onResume() {
-        super.onResume()
-        Handler().postDelayed({ hintsList.showNext(this) }, 500)
+    fun post(view: View) {
+        Handler().postDelayed({ hintsList.showNext() }, 500)
     }
 
-    override fun needToDismiss() {
-        hintsList.dismissCurrent(true)
+    fun stop(view: View) {
+        hintsList.skip()
+    }
+
+    fun dismissAll(view: View) {
+        hintsList.dismissAll()
+    }
+
+    fun wasAllShowed(view: View) {
+        Toast.makeText(this, hintsList.allWasShowed().toString(), Toast.LENGTH_LONG).show()
     }
 }

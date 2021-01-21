@@ -23,6 +23,41 @@
 
     </FrameLayout>
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="post"
+        android:text="post"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="stop"
+        android:text="stop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="wasAllShowed"
+        android:onClick="wasAllShowed"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="dismissAll"
+        android:onClick="dismissAll"
+        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -43,7 +78,7 @@
         app:fontFamily="@font/roboto_regular"
         app:textSize="12sp"
         app:backgroundColor="#F241B6FF"
-        app:text="Use the snap button to capture  image"
+        app:text="tip1"
         android:alpha="0.95"/>
 
     <datacomprojects.com.hint.TipView
@@ -56,7 +91,7 @@
         app:textSize="12sp"
         app:backgroundColor="#F241B6FF"
         app:viewBottomPosition="true"
-        app:text="Choose recognition and translation language here"
+        app:text="tip2"
         app:marginToView="16dp"
         app:shadow_color="#CCFF0000"
         android:alpha="0.95"/>
@@ -71,7 +106,7 @@
         app:font_Family="@font/roboto_bold"
         app:textSize="12sp"
         app:backgroundColor="#F241B6FF"
-        app:text="You can tap to edit the text"
+        app:text="tip3"
         app:viewBottomPosition="false"
         app:marginToView="32dp"
         android:alpha="0.95"/>

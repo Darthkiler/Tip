@@ -4,28 +4,22 @@ import android.content.Context
 
 import java.util.ArrayList
 
-import datacomprojects.com.hint.callbacks.TipNeedToDismissTipInterface
-import datacomprojects.com.hint.callbacks.TipShowCallback
-
 class TipsList(private val context: Context) {
 
-    var tipArrayList = ArrayList<Tip>()
-
-    private var hintShowedCallback: TipShowCallback? = null
-
-    fun setHintShowedCallback(hintShowedCallback: TipShowCallback) {
-        this.hintShowedCallback = hintShowedCallback
-    }
+    private var tipArrayList = ArrayList<Tip>()
 
     fun addTipToArray(tip: Tip) {
         tipArrayList.add(tip)
     }
 
-    fun showNext(tipNeedToDismissTipInterface: TipNeedToDismissTipInterface) {
+    fun showNext() {
         for (tip in tipArrayList) {
-            if (tip.showIfNeed(context)) {
-                tip.customHint.tipNeedToDismissTipInterface = tipNeedToDismissTipInterface
-                hintShowedCallback?.onShow(tip.hintID)
+            if (!tip.wasShowed(context)) {
+                tip.showIfNeed(context) {
+                    tip.hide(context) {
+                        showNext()
+                    }
+                }
                 break
             }
         }
@@ -40,7 +34,7 @@ class TipsList(private val context: Context) {
 
     fun dismissAll() {
         for (tip in tipArrayList)
-            tip.hide(context, true)
+            tip.hide(context)
     }
 
     fun addAll() {
@@ -48,12 +42,12 @@ class TipsList(private val context: Context) {
             tip.reset(context)
     }
 
-    fun dismissCurrent(needToRemoveFromSharedPreferencesUtils: Boolean) {
+    fun skip(onDismiss: ((String) -> Unit)? = null) {
         for (tip in tipArrayList)
             if (tip.isShow) {
-                tip.hide(context , needToRemoveFromSharedPreferencesUtils)
-                if(needToRemoveFromSharedPreferencesUtils)
-                    hintShowedCallback?.onDismiss(tip.hintID)
+                tip.hide(context) {
+                    onDismiss?.let { it(tip.hintID) }
+                }
                 break
             }
     }

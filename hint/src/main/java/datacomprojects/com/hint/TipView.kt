@@ -12,8 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import datacomprojects.com.hint.callbacks.TipNeedToDismissTipInterface
-import datacomprojects.com.hint.callbacks.TipViewAnimationEndCallBack
 import datacomprojects.com.roundbackground.RoundBackgroundLayout
 import datacomprojects.com.tip.R
 import kotlinx.android.synthetic.main.hips_view.view.*
@@ -23,7 +21,7 @@ import kotlin.math.min
 
 class TipView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr), View.OnTouchListener{
+) : ConstraintLayout(context, attrs, defStyleAttr){
 
     companion object {
 
@@ -49,8 +47,6 @@ class TipView @JvmOverloads constructor(
     private var pointerPositionTop: Boolean = false
     private var view: View? = null
 
-    var tipNeedToDismissTipInterface: TipNeedToDismissTipInterface? = null
-    var tipViewAnimationEndCallBack: TipViewAnimationEndCallBack? = null
 
     init {
         View.inflate(context, R.layout.hips_view, this)
@@ -112,17 +108,25 @@ class TipView @JvmOverloads constructor(
 
         visibility = View.INVISIBLE
 
-        setOnTouchListener(this)
-        roundBackgroundLayout.setOnTouchListener(this)
 
     }
 
-    fun show() {
+    fun show(onDismiss: () -> Unit) {
         animateViewVisibility(this, View.VISIBLE)
+        setOnTouchListener { view, event ->
+            onTouch(view, event) {
+                onDismiss()
+            }
+        }
+        roundBackgroundLayout.setOnTouchListener { view, event ->
+            onTouch(view, event) {
+                onDismiss()
+            }
+        }
     }
 
-    fun hide() {
-        animateViewVisibility(this, View.INVISIBLE)
+    fun hide(onAnimationEnd: (() -> Unit)? = null) {
+        animateViewVisibility(this, View.INVISIBLE, onAnimationEnd)
     }
 
     override fun dispatchDraw(canvas: Canvas) {
@@ -234,7 +238,7 @@ class TipView @JvmOverloads constructor(
         this.view = view
     }
 
-    private fun animateViewVisibility(view: View, visibility: Int) {
+    private fun animateViewVisibility(view: View, visibility: Int, onAnimationEnd: (() -> Unit)? = null) {
 
         view.animate().cancel()
         view.animate().setListener(null)
@@ -249,7 +253,7 @@ class TipView @JvmOverloads constructor(
             view.animate().setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     view.visibility = visibility
-                    tipViewAnimationEndCallBack?.animationEnd(visibility)
+                    onAnimationEnd?.let { it() }
                 }
             }).alpha(0f).start()
         }
@@ -275,10 +279,9 @@ class TipView @JvmOverloads constructor(
 
     }
 
-
-    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+    private fun onTouch(v: View?, event: MotionEvent?, tipNeedToDismissTipInterface: () -> Unit): Boolean {
         if(event?.action == MotionEvent.ACTION_DOWN) {
-            tipNeedToDismissTipInterface?.needToDismiss()
+            tipNeedToDismissTipInterface()
             return v?.id == roundBackgroundLayout.id
         }
         return false
